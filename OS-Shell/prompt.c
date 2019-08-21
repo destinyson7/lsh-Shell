@@ -2,7 +2,7 @@
 
 void prompt(char *home)
 {
-    char s[MAX_SIZE], *t, curPath[MAX_SIZE];
+    char s[MAX_SIZE] = "", *t, curPath[MAX_SIZE] = "";
 
     t = getenv("LOGNAME");
     gethostname(s, MAX_SIZE);
@@ -12,9 +12,18 @@ void prompt(char *home)
     int n1 = strlen(home);
     int n2 = strlen(curPath);
 
+    int i = 0;
+    for(i = 0; i < n1 && i < n2; i++)
+    {
+        if(curPath[i] != home[i])
+        {
+            break;
+        }
+    }
+
     // printf("%s %s %d %d\n", curPath, home, n1, n2);
 
-    if(n2 >= n1)
+    if(i == n1)
     {
         curPath[0] = '~';
 

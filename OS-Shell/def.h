@@ -8,3 +8,5 @@
 void prompt();
 void cd(char *path, char *home);
 void pwd();
+void echo(char *cur);
+void pinfo(char *token, char *home);
