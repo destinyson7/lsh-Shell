@@ -75,7 +75,7 @@ int main(int argc, char *argv[])
 
             else if(strcmp(next, "ls") == 0)
             {
-                // ls(next);
+                ls(next, home);
             }
 
             else if(strcmp(next, "pinfo") == 0)
