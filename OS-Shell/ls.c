@@ -140,8 +140,9 @@ void lsla(char *actualPath, int hidden)
             printf((sb.st_mode & S_IROTH) ? "r" : "-");
             printf((sb.st_mode & S_IWOTH) ? "w" : "-");
             printf((sb.st_mode & S_IXOTH) ? "x" : "-");
-            printf(" %9.9s", getpwuid(sb.st_uid)->pw_name);
-            printf("%9.9s", getgrgid(sb.st_gid)->gr_name);
+            printf(" %2d", (int)sb.st_nlink);
+            printf(" %8.8s", getpwuid(sb.st_uid)->pw_name);
+            printf("%8.8s", getgrgid(sb.st_gid)->gr_name);
             printf(" %12lld", (long long int)sb.st_size);
 
             t = localtime(&sb.st_mtime);
