@@ -42,22 +42,56 @@ void lsla(char *actualPath, int hidden)
     struct tm *t;
     char date[MAX_SIZE];
 
-    dir = opendir(actualPath);
+    // printf("actualPath: %s\n", actualPath);
 
+    dir = opendir(actualPath);
     if(!dir)
     {
         perror(actualPath);
         return;
     }
 
+    long long int total = 0;
     while((ent = readdir(dir)) != NULL)
     {
-        stat(ent->d_name, &sb);
-
         char *curName = ent->d_name;
+        
+        char curPath[MAX_SIZE];
+
+        strcpy(curPath, actualPath);
+        strcat(curPath, "/");
+        strcat(curPath, curName);
+
+        stat(curPath, &sb);
 
         if(hidden == 1 || (hidden == 0 && curName[0] != '.'))
         {
+            total += sb.st_blocks;
+        }
+    }
+    closedir(dir);
+    printf("total %lld\n", total/2);
+
+
+    dir = opendir(actualPath);
+
+    while((ent = readdir(dir)) != NULL)
+    {
+        char *curName = ent->d_name;
+        
+        char curPath[MAX_SIZE];
+
+        strcpy(curPath, actualPath);
+        strcat(curPath, "/");
+        strcat(curPath, curName);
+
+        stat(curPath, &sb);
+
+
+        if(hidden == 1 || (hidden == 0 && curName[0] != '.'))
+        {
+            // total+=sb.st_blocks;
+            
             char fileType = '-';
 
             if(S_ISDIR(sb.st_mode))
@@ -106,15 +140,24 @@ void lsla(char *actualPath, int hidden)
             printf((sb.st_mode & S_IROTH) ? "r" : "-");
             printf((sb.st_mode & S_IWOTH) ? "w" : "-");
             printf((sb.st_mode & S_IXOTH) ? "x" : "-");
-            printf(" %8.8s", getpwuid(sb.st_uid)->pw_name);
-            printf("%8.8s", getgrgid(sb.st_gid)->gr_name);
+            printf(" %9.9s", getpwuid(sb.st_uid)->pw_name);
+            printf("%9.9s", getgrgid(sb.st_gid)->gr_name);
             printf(" %12lld", (long long int)sb.st_size);
 
             t = localtime(&sb.st_mtime);
             strftime(date, MAX_SIZE, nl_langinfo(D_T_FMT), t);
-            printf(" %s %s\n", date, ent->d_name);
+            
+            for(int i=4; i<16; i++)
+            {
+                date[i-4] = date[i];
+            }
+            date[12] = '\0';
+
+            printf(" %s %s\n", date, curName);
         }
     }
+
+    // printf("\ntotal %d\n", total/2);
 
     closedir(dir);
 }

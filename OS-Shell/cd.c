@@ -13,7 +13,10 @@ void cd(char *path, char *home)
 
     if(path[0] == '~')
     {
-        strcpy(changePath, strcat(home, path+1));
+        char new[MAX_SIZE];
+        strcpy(new, home);
+        strcat(new, path+1);
+        strcpy(changePath, new);
     }
 
     else
