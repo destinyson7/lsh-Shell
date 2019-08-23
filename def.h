@@ -10,6 +10,7 @@
 #include <time.h>
 #include <langinfo.h>
 #include <sys/wait.h>
+#include <signal.h>
 
 #define MAX_SIZE (int)1e3+5
 

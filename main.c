@@ -1,5 +1,11 @@
 #include "def.h"
 
+void checkSignal(int signal)
+{
+    // do nothing
+    return;
+}
+
 int main(int argc, char *argv[])
 {
     printf(BLUE "Welcome to " CYAN "lsh" BLUE " aka laaaad's Shell\n\n");
@@ -36,6 +42,9 @@ int main(int argc, char *argv[])
     while(1)
     {
         prompt(home);
+
+        signal(SIGINT, checkSignal);
+        signal(SIGTSTP, checkSignal);
 
         int status;
         int get = waitpid(-1, &status, WNOHANG);
