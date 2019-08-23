@@ -88,7 +88,7 @@ void pinfo(char *token, char *home)
 
     if(i == n1)
     {
-        if(n1 == n2 || (n2 > n1 && executablePath[n2] == '/'))
+        if(n1 == n2 || (n2 > n1 && executablePath[n1] == '/'))
         {
             executablePath[0] = '~';
 

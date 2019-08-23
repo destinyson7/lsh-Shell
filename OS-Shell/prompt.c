@@ -25,7 +25,7 @@ void prompt(char *home)
 
     if(i == n1)
     {
-        if(n1 == n2 || (n2 > n1 && curPath[n2] == '/'))
+        if(n1 == n2 || (n2 > n1 && curPath[n1] == '/'))
         {
             curPath[0] = '~';
 
@@ -38,7 +38,7 @@ void prompt(char *home)
         }
     }
 
-    printf("<%s@%s:%s> ", t, s, curPath);
+    printf(YELLOW "<%s@%s:" CYAN "%s> " RESET, t, s, curPath);
 
     return;
 }

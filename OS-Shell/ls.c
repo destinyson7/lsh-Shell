@@ -70,7 +70,7 @@ void lsla(char *actualPath, int hidden)
         }
     }
     closedir(dir);
-    printf("total %lld\n", total);
+    printf("total %lld\n", total/2);
 
 
     dir = opendir(actualPath);
