@@ -25,14 +25,17 @@ void prompt(char *home)
 
     if(i == n1)
     {
-        curPath[0] = '~';
-
-        for(int i=n1; i<n2; i++)
+        if(n1 == n2 || (n2 > n1 && curPath[n2] == '/'))
         {
-            // printf("%c ", curPath[i]);
-            curPath[i-n1+1] = curPath[i];
+            curPath[0] = '~';
+
+            for(int i=n1; i<n2; i++)
+            {
+                // printf("%c ", curPath[i]);
+                curPath[i-n1+1] = curPath[i];
+            }
+            curPath[n2-n1+1] = '\0';
         }
-        curPath[n2-n1+1] = '\0';
     }
 
     printf("<%s@%s:%s> ", t, s, curPath);

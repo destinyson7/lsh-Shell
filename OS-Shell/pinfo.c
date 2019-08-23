@@ -88,13 +88,16 @@ void pinfo(char *token, char *home)
 
     if(i == n1)
     {
-        executablePath[0] = '~';
-
-        for(int i=n1; i<n2; i++)
+        if(n1 == n2 || (n2 > n1 && executablePath[n2] == '/'))
         {
-            executablePath[i-n1+1] = executablePath[i];
+            executablePath[0] = '~';
+
+            for(int i=n1; i<n2; i++)
+            {
+                executablePath[i-n1+1] = executablePath[i];
+            }
+            executablePath[n2-n1+1] = '\0';
         }
-        executablePath[n2-n1+1] = '\0';
     }
 
     printf("Executable Path -- %s\n", executablePath);
