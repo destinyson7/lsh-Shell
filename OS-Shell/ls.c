@@ -70,7 +70,7 @@ void lsla(char *actualPath, int hidden)
         }
     }
     closedir(dir);
-    printf("total %lld\n", total/2);
+    printf("total %lld\n", total);
 
 
     dir = opendir(actualPath);
@@ -140,7 +140,7 @@ void lsla(char *actualPath, int hidden)
             printf((sb.st_mode & S_IROTH) ? "r" : "-");
             printf((sb.st_mode & S_IWOTH) ? "w" : "-");
             printf((sb.st_mode & S_IXOTH) ? "x" : "-");
-            printf(" %2d", (int)sb.st_nlink);
+            printf(" %3d", (int)sb.st_nlink);
             printf(" %8.8s", getpwuid(sb.st_uid)->pw_name);
             printf("%8.8s", getgrgid(sb.st_gid)->gr_name);
             printf(" %12lld", (long long int)sb.st_size);

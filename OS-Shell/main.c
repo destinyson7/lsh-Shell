@@ -51,7 +51,21 @@ int main(int argc, char *argv[])
         
         for(int i = 0; i < numberOfCommands; i++)
         {
-            char *next = strtok(command[i], " \t");
+            char duplicate[MAX_SIZE];
+            strcpy(duplicate, command[i]);
+            char *next = strtok(command[i], " \t\n");
+
+            int flag = 0;
+
+            for(int j = 0; next[j] != '\0'; j++)
+            {
+                if(next[j] == '&')
+                {
+                    flag = 1;
+                    next[i] = '\0';
+                    break;
+                }
+            }
 
             if(strcmp(next, "exit") == 0 || strcmp(next, "quit") == 0)
             {
@@ -84,6 +98,54 @@ int main(int argc, char *argv[])
             }
 
             // printf("%s\n", next);
+
+            else
+            {
+                int pid = fork();
+
+                if(pid < 0)
+                {
+                    perror(next);
+                }
+
+                else if(pid == 0)
+                {
+                    char **send = (char **) malloc(MAX_SIZE * sizeof(char *));
+
+                    char *cur = strtok(duplicate, " \t\n");
+
+                    int index = 0;
+
+                    while(cur != NULL)
+                    {
+                        send[index++] = cur;
+
+                        cur = strtok(NULL, " \t\n");
+                    }
+
+                    send[index++] = NULL;
+                    send[0] = next;
+
+                    if(execvp(send[0], send) == -1)
+                    {
+                        perror(next);
+                    }
+                }
+
+                else
+                {
+                    if(flag)
+                    {
+
+                    }
+
+                    else
+                    {
+                        wait(NULL);
+                    }
+                }
+            }
+
         }
     }
 
