@@ -35,3 +35,5 @@ void echo(char *cur);
 void ls(char *token, char *home);
 void pinfo(char *token, char *home);
 void fg_bg(char *token, int flag, int *proc_size, process proc[]);
+int storeHistory(int done, char data[20][MAX_SIZE], char command[]);
+void history(char *token, char data[20][MAX_SIZE], int done);

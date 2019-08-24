@@ -39,6 +39,39 @@ int main(int argc, char *argv[])
         proc[i].pid = -1;
     }
 
+    FILE *fp;
+
+    char data[20][MAX_SIZE];
+
+    int done = 0;
+    fp = fopen("data.txt", "rb");
+    
+    if(fp == NULL)
+    {
+        for(int i = 0; i < 20; i++)
+        {
+            strcpy(data[i], "\0");
+        }
+    }
+
+    else
+    {
+        fread(&data, sizeof(data), 1, fp);
+
+        for(int i = 0; i < 20; i++)
+        {
+            // printf("%s\n", data[i]);
+            if(data[i] != '\0')
+            {
+                done++;
+            }
+        }
+        
+        fclose(fp);
+    }
+
+
+
     while(1)
     {
         prompt(home);
@@ -53,7 +86,7 @@ int main(int argc, char *argv[])
         {
             if(!WIFEXITED(status))
             {
-                char print[MAX_SIZE] = "";;
+                char print[MAX_SIZE] = "Process";
                 for(int i = 0; i < MAX_SIZE; i++)
                 {
                     if(proc[i].pid == get)
@@ -64,6 +97,7 @@ int main(int argc, char *argv[])
                 }
 
                 printf("\n%s with pid %d exited with exit status: %d\n", print, get, WEXITSTATUS(status));
+                prompt(home);
             }
         }
 
@@ -72,6 +106,7 @@ int main(int argc, char *argv[])
             if(kill(proc[i].pid, 0) == -1)
             {
                 printf("\n%s with pid %d exited normally\n", proc[i].name, proc[i].pid);
+                prompt(home);
                 proc[i].pid = -1;
             }
         }
@@ -111,14 +146,31 @@ int main(int argc, char *argv[])
                 }
             }
 
+            if(strcmp(command[i], "\0") == 0)
+            {
+                continue;
+            }
+
             // printf("%s cur\n", command[i]);
             char duplicate[MAX_SIZE];
             strcpy(duplicate, command[i]);
 
             char *next = strtok(command[i], " \t\n");
 
+            done = storeHistory(done, data, duplicate);
+            // printf("%d done\n", done);
+
+            // for(int i = 0; i < 20; i++)
+            // {
+            //     printf("%s\n", data[i]);
+            // }
+
             if(strcmp(next, "exit") == 0 || strcmp(next, "quit") == 0)
             {
+                fp = fopen("data.txt", "wb");
+                // printf("saved to file\n");
+                fwrite(data, sizeof(data), 1, fp);
+                fclose(fp);
                 return 0;
             }
 
@@ -145,6 +197,11 @@ int main(int argc, char *argv[])
             else if(strcmp(next, "pinfo") == 0)
             {
                 pinfo(next, home);
+            }
+
+            else if(strcmp(next, "history") == 0)
+            {
+                history(next, data, done);
             }
 
             // printf("%s\n", next);
