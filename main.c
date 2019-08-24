@@ -39,12 +39,18 @@ int main(int argc, char *argv[])
         proc[i].pid = -1;
     }
 
+    // For history commmand
     FILE *fp;
 
     char data[20][MAX_SIZE];
 
     int done = 0;
-    fp = fopen("data.txt", "rb");
+
+    char newPath[MAX_SIZE];
+    strcpy(newPath, home);
+    strcat(newPath, "/");
+    strcat(newPath, "data.txt");
+    fp = fopen(newPath, "rb");
     
     if(fp == NULL)
     {
@@ -70,15 +76,15 @@ int main(int argc, char *argv[])
         fclose(fp);
     }
 
-
-
     while(1)
     {
         prompt(home);
 
+        // Disabling Ctrl + C and Ctrl + Z signals.
         signal(SIGINT, checkSignal);
         signal(SIGTSTP, checkSignal);
 
+        // For background process status printing
         int status;
         int get = waitpid(-1, &status, WNOHANG);
 
@@ -134,6 +140,7 @@ int main(int argc, char *argv[])
         
         for(int i = 0; i < numberOfCommands; i++)
         {
+            // Checking if '&' is present or not
             int flag = 0;
 
             for(int j = 0; command[i][j] != '\0'; j++)
@@ -146,6 +153,7 @@ int main(int argc, char *argv[])
                 }
             }
 
+            // To ensure that null string does not get added in history command
             if(strcmp(command[i], "\0") == 0)
             {
                 continue;
@@ -157,7 +165,15 @@ int main(int argc, char *argv[])
 
             char *next = strtok(command[i], " \t\n");
 
-            done = storeHistory(done, data, duplicate);
+            if(next == NULL)
+            {
+                continue;
+            }
+
+            if(duplicate[0] != ' ')
+            {
+                done = storeHistory(done, data, duplicate);
+            }
             // printf("%d done\n", done);
 
             // for(int i = 0; i < 20; i++)
@@ -167,7 +183,11 @@ int main(int argc, char *argv[])
 
             if(strcmp(next, "exit") == 0 || strcmp(next, "quit") == 0)
             {
-                fp = fopen("data.txt", "wb");
+                char newPath2[MAX_SIZE];
+                strcpy(newPath2, home);
+                strcat(newPath2, "/");
+                strcat(newPath2, "data.txt");
+                fp = fopen(newPath2, "wb");
                 // printf("saved to file\n");
                 fwrite(data, sizeof(data), 1, fp);
                 fclose(fp);
@@ -186,7 +206,7 @@ int main(int argc, char *argv[])
 
             else if(strcmp(next, "echo") == 0)
             {
-                echo(next);
+                exEcho(next);
             }
 
             else if(strcmp(next, "ls") == 0)
@@ -204,10 +224,16 @@ int main(int argc, char *argv[])
                 history(next, data, done);
             }
 
+            else if(strcmp(next, "nightswatch") == 0)
+            {
+                nightswatch(next);
+            }
+
             // printf("%s\n", next);
 
             else
             {
+                // printf("here fg_bg\n");
                 fg_bg(duplicate, flag, &proc_size, proc);
             }
 

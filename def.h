@@ -11,6 +11,7 @@
 #include <langinfo.h>
 #include <sys/wait.h>
 #include <signal.h>
+#include <ncurses.h>
 
 #define MAX_SIZE (int)1e3+5
 
@@ -31,9 +32,10 @@ typedef struct process
 void prompt();
 void cd(char *path, char *home);
 void pwd();
-void echo(char *cur);
+void exEcho(char *cur);
 void ls(char *token, char *home);
 void pinfo(char *token, char *home);
 void fg_bg(char *token, int flag, int *proc_size, process proc[]);
 int storeHistory(int done, char data[20][MAX_SIZE], char command[]);
 void history(char *token, char data[20][MAX_SIZE], int done);
+void nightswatch(char *token);

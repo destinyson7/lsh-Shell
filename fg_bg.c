@@ -21,6 +21,7 @@ void fg_bg(char curCommand[], int flag, int *proc_size, process proc[])
     }
     store[cnt++] = NULL;
 
+    // If '&' was present, then run in background
     if(flag)
     {
         int pid = fork();
@@ -29,7 +30,7 @@ void fg_bg(char curCommand[], int flag, int *proc_size, process proc[])
         strcpy(proc[*proc_size].name, store[0]);
         (*proc_size)++;
 
-        setpgid(0, 0);
+        setpgid(0, 0); // Runs in background
 
         if(pid < 0)
         {
@@ -38,7 +39,7 @@ void fg_bg(char curCommand[], int flag, int *proc_size, process proc[])
 
         if(pid == 0)
         {
-            close(STDERR_FILENO);
+            close(STDERR_FILENO); // So that processes like firefox does not print error after closing
             if(execvp(store[0], store) == -1)
             {
                 perror(store[0]);
@@ -47,6 +48,7 @@ void fg_bg(char curCommand[], int flag, int *proc_size, process proc[])
         }
     }
 
+    // Run in foreground
     else
     {
         int pid = fork();

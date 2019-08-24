@@ -9,6 +9,7 @@ void prompt(char *home)
 
     getcwd(curPath, MAX_SIZE);
 
+    // Checking if replacable by '~'
     int n1 = strlen(home);
     int n2 = strlen(curPath);
 

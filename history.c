@@ -53,7 +53,7 @@ void history(char *token, char data[20][MAX_SIZE], int done)
         n = 10;
     }
 
-    printf("n = %d\n", n);
+    // printf("n = %d\n", n);
 
     if(n > 20)
     {

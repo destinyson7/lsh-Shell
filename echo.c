@@ -1,6 +1,6 @@
 #include "def.h"
 
-void echo(char *cur)
+void exEcho(char *cur)
 {
     cur = strtok(NULL, " \t");
 
