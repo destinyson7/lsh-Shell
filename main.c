@@ -92,18 +92,30 @@ int main(int argc, char *argv[])
         {
             if(!WIFEXITED(status))
             {
-                char print[MAX_SIZE] = "Process";
+                char print[MAX_SIZE] = "";
                 for(int i = 0; i < MAX_SIZE; i++)
                 {
                     if(proc[i].pid == get)
                     {
                         proc[i].pid = -1;
+
+                        for(int j = 0; proc[i].name[j] != '\0'; j++)
+                        {
+                            if(proc[i].name[j] == ' ')
+                            {
+                                print[j] = '\0';
+                                break;
+                            }
+
+                            print[j] = proc[i].name[j];
+                        }
+
                         strcpy(print, proc[i].name);
                     }
                 }
 
                 char exitPrint[MAX_SIZE];
-                sprintf(exitPrint, "\n%s with pid %d exited with exit status: %d\n", print, get, WEXITSTATUS(status));
+                sprintf(exitPrint, "%s with pid %d exited with exit status: %d\n", print, get, WEXITSTATUS(status));
                 write(2, exitPrint, strlen(exitPrint));
             }
         }
@@ -112,9 +124,24 @@ int main(int argc, char *argv[])
         {
             if(kill(proc[i].pid, 0) == -1)
             {
+                char print[MAX_SIZE] = "";
+                for(int j = 0; proc[i].name[j] != '\0'; j++)
+                {
+                    if(proc[i].name[j] == ' ')
+                    {
+                        print[j] = '\0';
+                        break;
+                    }
+
+                    print[j] = proc[i].name[j];
+                }
+
+                // strcpy(print, proc[i].name);
+                
                 char exitPrint[2*MAX_SIZE];
-                sprintf(exitPrint, "\n%s with pid %d exited normally\n", proc[i].name, proc[i].pid);
+                sprintf(exitPrint, "%s with pid %d exited normally\n", print, proc[i].pid);
                 write(2, exitPrint, strlen(exitPrint));
+                // fflush(stdout);
 
                 // prompt(home);
                 proc[i].pid = -1;
@@ -185,7 +212,7 @@ int main(int argc, char *argv[])
             //     printf("%s\n", data[i]);
             // }
 
-            if(strcmp(next, "exit") == 0 || strcmp(next, "quit") == 0)
+            if(strcmp(next, "quit") == 0)
             {
                 char newPath2[MAX_SIZE];
                 strcpy(newPath2, home);
@@ -231,8 +258,8 @@ int main(int argc, char *argv[])
             else if(strcmp(next, "nightswatch") == 0)
             {
                 nightswatch(next);
-            }
-
+            
+}
             else if(strcmp(next, "setenv") == 0)
             {
                 setEnv(next);
@@ -241,6 +268,11 @@ int main(int argc, char *argv[])
             else if(strcmp(next, "unsetenv") == 0)
             {
                 unsetEnv(next);
+            }
+
+            else if(strcmp(next, "jobs") == 0)
+            {
+                jobs(next, proc);
             }
 
             // printf("%s\n", next);

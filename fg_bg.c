@@ -1,11 +1,17 @@
+
 #include "def.h"
 
 void fg_bg(char curCommand[], int flag, int *proc_size, process proc[])
 {
     // printf("%s curCommand\n", curCommand);
-    char **store = (char **) malloc(sizeof(char *) * MAX_SIZE);
+    char **store = (char**) malloc(sizeof(char*) * MAX_SIZE);
 
-    char *token = strtok(curCommand, " \t\n");
+    if(flag)
+    {
+        strcpy(proc[*proc_size].name, curCommand);
+    }
+
+    char *token = strtok(curCommand, " \t\n");   
 
     int cnt = 0;
 
@@ -27,7 +33,7 @@ void fg_bg(char curCommand[], int flag, int *proc_size, process proc[])
         int pid = fork();
 
         proc[*proc_size].pid = pid;
-        strcpy(proc[*proc_size].name, store[0]);
+        // strcpy(proc[*proc_size].name, store[0]);
         (*proc_size)++;
 
         setpgid(0, 0); // Runs in background
@@ -39,10 +45,10 @@ void fg_bg(char curCommand[], int flag, int *proc_size, process proc[])
 
         if(pid == 0)
         {
-            close(STDERR_FILENO); // So that processes like firefox does not print error after closing
+            // close(STDERR_FILENO); // So that processes like firefox does not print error after closing
             if(execvp(store[0], store) == -1)
             {
-                perror(store[0]);
+                printf("%s: Command Not Found\n", store[0]);
                 exit(0);
             }
         }
