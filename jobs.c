@@ -84,10 +84,27 @@ void kjob(char *token, process proc[])
                     perror("Invalid signal number\n");
                 }
 
+                if(sig == 9)
+                {
+                    proc[i].pid = -1;
+                }
+
                 return;
             }
         }
     }
 
     printf("Invalid job number\n");
+}
+
+void overkill(process proc[])
+{
+    for(int i = 0; i < MAX_SIZE; i++)
+    {
+        if(proc[i].pid != -1)
+        {
+            kill(proc[i].pid, 9);
+            proc[i].pid = -1;
+        }
+    }
 }

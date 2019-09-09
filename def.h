@@ -43,3 +43,4 @@ void setEnv(char *token);
 void unsetEnv(char *token);
 void jobs(process proc[]);
 void kjob(char *token, process proc[]);
+void overkill(process proc[]);

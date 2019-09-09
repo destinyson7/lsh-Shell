@@ -114,6 +114,11 @@ int main(int argc, char *argv[])
                     }
                 }
 
+                if(strcmp(print, "") == 0)
+                {
+                    strcpy(print, "Process ");
+                }
+
                 char exitPrint[MAX_SIZE];
                 sprintf(exitPrint, "%swith pid %d exited with exit status: %d\n", print, get, WEXITSTATUS(status));
                 write(2, exitPrint, strlen(exitPrint));
@@ -278,6 +283,11 @@ int main(int argc, char *argv[])
             else if(strcmp(next, "kjob") == 0)
             {
                 kjob(next, proc);
+            }
+
+            else if(strcmp(next, "overkill") == 0)
+            {
+                overkill(proc);
             }
 
             // printf("%s\n", next);
