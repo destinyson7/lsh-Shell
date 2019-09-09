@@ -41,4 +41,5 @@ void history(char *token, char data[20][MAX_SIZE], int done);
 void nightswatch(char *token);
 void setEnv(char *token);
 void unsetEnv(char *token);
-void jobs(char *token, process proc[]);
+void jobs(process proc[]);
+void kjob(char *token, process proc[]);

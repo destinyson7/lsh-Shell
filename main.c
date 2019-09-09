@@ -115,7 +115,7 @@ int main(int argc, char *argv[])
                 }
 
                 char exitPrint[MAX_SIZE];
-                sprintf(exitPrint, "%s with pid %d exited with exit status: %d\n", print, get, WEXITSTATUS(status));
+                sprintf(exitPrint, "%swith pid %d exited with exit status: %d\n", print, get, WEXITSTATUS(status));
                 write(2, exitPrint, strlen(exitPrint));
             }
         }
@@ -139,7 +139,7 @@ int main(int argc, char *argv[])
                 // strcpy(print, proc[i].name);
                 
                 char exitPrint[2*MAX_SIZE];
-                sprintf(exitPrint, "%s with pid %d exited normally\n", print, proc[i].pid);
+                sprintf(exitPrint, "%swith pid %d exited normally\n", print, proc[i].pid);
                 write(2, exitPrint, strlen(exitPrint));
                 // fflush(stdout);
 
@@ -258,8 +258,8 @@ int main(int argc, char *argv[])
             else if(strcmp(next, "nightswatch") == 0)
             {
                 nightswatch(next);
-            
-}
+            }
+
             else if(strcmp(next, "setenv") == 0)
             {
                 setEnv(next);
@@ -272,7 +272,12 @@ int main(int argc, char *argv[])
 
             else if(strcmp(next, "jobs") == 0)
             {
-                jobs(next, proc);
+                jobs(proc);
+            }
+
+            else if(strcmp(next, "kjob") == 0)
+            {
+                kjob(next, proc);
             }
 
             // printf("%s\n", next);
