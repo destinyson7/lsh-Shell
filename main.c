@@ -67,7 +67,7 @@ int main(int argc, char *argv[])
         for(int i = 0; i < 20; i++)
         {
             // printf("%s\n", data[i]);
-            if(data[i] != '\0')
+            if(strcmp(data[i], "\0"))
             {
                 done++;
             }
@@ -102,8 +102,9 @@ int main(int argc, char *argv[])
                     }
                 }
 
-                printf("\n%s with pid %d exited with exit status: %d\n", print, get, WEXITSTATUS(status));
-                prompt(home);
+                char exitPrint[MAX_SIZE];
+                sprintf(exitPrint, "\n%s with pid %d exited with exit status: %d\n", print, get, WEXITSTATUS(status));
+                write(2, exitPrint, strlen(exitPrint));
             }
         }
 
@@ -111,8 +112,11 @@ int main(int argc, char *argv[])
         {
             if(kill(proc[i].pid, 0) == -1)
             {
-                printf("\n%s with pid %d exited normally\n", proc[i].name, proc[i].pid);
-                prompt(home);
+                char exitPrint[2*MAX_SIZE];
+                sprintf(exitPrint, "\n%s with pid %d exited normally\n", proc[i].name, proc[i].pid);
+                write(2, exitPrint, strlen(exitPrint));
+                
+                // prompt(home);
                 proc[i].pid = -1;
             }
         }
