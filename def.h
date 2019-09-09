@@ -39,3 +39,5 @@ void fg_bg(char *token, int flag, int *proc_size, process proc[]);
 int storeHistory(int done, char data[20][MAX_SIZE], char command[]);
 void history(char *token, char data[20][MAX_SIZE], int done);
 void nightswatch(char *token);
+void setEnv(char *token);
+void unsetEnv(char *token);

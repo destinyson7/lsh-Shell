@@ -115,7 +115,7 @@ int main(int argc, char *argv[])
                 char exitPrint[2*MAX_SIZE];
                 sprintf(exitPrint, "\n%s with pid %d exited normally\n", proc[i].name, proc[i].pid);
                 write(2, exitPrint, strlen(exitPrint));
-                
+
                 // prompt(home);
                 proc[i].pid = -1;
             }
@@ -231,6 +231,16 @@ int main(int argc, char *argv[])
             else if(strcmp(next, "nightswatch") == 0)
             {
                 nightswatch(next);
+            }
+
+            else if(strcmp(next, "setenv") == 0)
+            {
+                setEnv(next);
+            }
+
+            else if(strcmp(next, "unsetenv") == 0)
+            {
+                unsetEnv(next);
             }
 
             // printf("%s\n", next);
