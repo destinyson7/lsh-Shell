@@ -1,10 +1,10 @@
 #include "def.h"
 
-void setEnv(char *cur)
+void setEnv(char *token)
 {
-    cur = strtok(NULL, " \t");
+    token = strtok(NULL, " \t");
 
-    if(cur == NULL)
+    if(token == NULL)
     {
         perror("Invalid number of arguments");
         return;
@@ -12,17 +12,17 @@ void setEnv(char *cur)
 
     char var[MAX_SIZE], value[MAX_SIZE] = "";
 
-    strcpy(var, cur);
+    strcpy(var, token);
 
-    cur = strtok(NULL, " \t");
+    token = strtok(NULL, " \t");
 
-    if(cur != NULL)
+    if(token != NULL)
     {
-        strcpy(value, cur);
+        strcpy(value, token);
 
-        cur = strtok(NULL, " \t");
+        token = strtok(NULL, " \t");
 
-        if(cur != NULL)
+        if(token != NULL)
         {
             perror("Invalid number of arguments");
             return;
@@ -32,11 +32,11 @@ void setEnv(char *cur)
     setenv(var, value, 1);
 }
 
-void unsetEnv(char *cur)
+void unsetEnv(char *token)
 {
-    cur = strtok(NULL, " \t");
+    token = strtok(NULL, " \t");
 
-    if(cur == NULL)
+    if(token == NULL)
     {
         perror("Invalid number of arguments");
         return;
@@ -44,11 +44,11 @@ void unsetEnv(char *cur)
 
     char var[MAX_SIZE];
 
-    strcpy(var, cur);
+    strcpy(var, token);
 
-    cur = strtok(NULL, " \t");
+    token = strtok(NULL, " \t");
 
-    if(cur != NULL)
+    if(token != NULL)
     {
         perror("Invalid number of arguments");
         return;
