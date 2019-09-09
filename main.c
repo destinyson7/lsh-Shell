@@ -110,17 +110,17 @@ int main(int argc, char *argv[])
                             print[j] = proc[i].name[j];
                         }
 
-                        strcpy(print, proc[i].name);
+                        // strcpy(print, proc[i].name);
                     }
                 }
 
                 if(strcmp(print, "") == 0)
                 {
-                    strcpy(print, "Process ");
+                    strcpy(print, "Process");
                 }
 
                 char exitPrint[MAX_SIZE];
-                sprintf(exitPrint, "%swith pid %d exited with exit status: %d\n", print, get, WEXITSTATUS(status));
+                sprintf(exitPrint, "%s with pid %d exited with exit status: %d\n", print, get, WEXITSTATUS(status));
                 write(2, exitPrint, strlen(exitPrint));
             }
         }
@@ -141,10 +141,15 @@ int main(int argc, char *argv[])
                     print[j] = proc[i].name[j];
                 }
 
+                if(strcmp(print, "") == 0)
+                {
+                    strcpy(print, "Process");
+                }
+                
                 // strcpy(print, proc[i].name);
                 
                 char exitPrint[2*MAX_SIZE];
-                sprintf(exitPrint, "%swith pid %d exited normally\n", print, proc[i].pid);
+                sprintf(exitPrint, "%s with pid %d exited normally\n", print, proc[i].pid);
                 write(2, exitPrint, strlen(exitPrint));
                 // fflush(stdout);
 
