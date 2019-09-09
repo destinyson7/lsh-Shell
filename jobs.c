@@ -83,12 +83,7 @@ void kjob(char *token, process proc[])
                 {
                     perror("Invalid signal number\n");
                 }
-
-                if(sig == 9)
-                {
-                    proc[i].pid = -1;
-                }
-
+                
                 return;
             }
         }
@@ -104,7 +99,6 @@ void overkill(process proc[])
         if(proc[i].pid != -1)
         {
             kill(proc[i].pid, 9);
-            proc[i].pid = -1;
         }
     }
 }
