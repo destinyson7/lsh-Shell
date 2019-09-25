@@ -41,6 +41,8 @@ void fg(char *token, process proc[], int *proc_size)
 
     int processesSoFar = 0;
 
+    int savePid = 0;
+
     for(int i = 0; i < MAX_SIZE; i++)
     {
         if(proc[i].pid != -1)
@@ -50,14 +52,20 @@ void fg(char *token, process proc[], int *proc_size)
             if(processesSoFar == job)
             {
                 kill(proc[i].pid, SIGCONT); // If the process was in stopped state, then it was causing problems
-                int savePid = proc[i].pid;
+                savePid = proc[i].pid;
+             
                 proc[i].pid = -1; 
-
+  
                 signal(SIGINT, handleC);
                 signal(SIGTSTP, handleZ);
 
-                int status;
-                while(waitpid(savePid, &status, WNOHANG) != savePid)
+                signal(SIGTTOU, SIG_IGN);
+                tcsetpgrp(0, getpgid(savePid));
+                kill(savePid, SIGCONT);
+                
+                signal(SIGTTOU, SIG_DFL);
+
+                while(waitpid(savePid, NULL, WUNTRACED) != savePid)
                 {
                     // wait
 
@@ -71,6 +79,7 @@ void fg(char *token, process proc[], int *proc_size)
 
                     if(zFlag == 1)
                     {
+                        setpgid(savePid, savePid);
                         kill(savePid, SIGSTOP);
 
                         proc[*proc_size].pid = savePid;
@@ -81,6 +90,10 @@ void fg(char *token, process proc[], int *proc_size)
                         break;
                     }
                 }
+
+                signal(SIGTTOU, SIG_IGN);
+                tcsetpgrp(0, getpid());
+                signal(SIGTTOU, SIG_DFL);
                 
                 return;
             }

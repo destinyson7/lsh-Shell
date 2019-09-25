@@ -44,12 +44,6 @@ void fg_bg(char curCommand[], int flag, int *proc_size, process proc[])
     {
         int pid = fork();
 
-        proc[*proc_size].pid = pid;
-        strcpy(proc[*proc_size].name, saveName);
-        (*proc_size)++;
-
-        setpgid(0, 0);
-
         if(pid < 0)
         {
             perror(store[0]);
@@ -57,12 +51,22 @@ void fg_bg(char curCommand[], int flag, int *proc_size, process proc[])
 
         if(pid == 0)
         {
+            setpgid(0, 0);
             // close(STDERR_FILENO); // So that processes like firefox does not print error after closing
             if(execvp(store[0], store) == -1)
             {
                 printf("%s: Command Not Found\n", store[0]);
                 // exit(0);
             }
+        }
+        
+        if(pid > 0)
+        {
+            setpgid(pid, pid);
+            
+            proc[*proc_size].pid = pid;
+            strcpy(proc[*proc_size].name, saveName);
+            (*proc_size)++;
         }
     }
 
