@@ -1,8 +1,9 @@
 #include "def.h"
 
-void checkSignal(int signal)
+void handleSignal()
 {
     // do nothing
+
     return;
 }
 
@@ -82,8 +83,9 @@ int main(int argc, char *argv[])
         prompt(home);
 
         // Disabling Ctrl + C and Ctrl + Z signals.
-        signal(SIGINT, checkSignal);
-        signal(SIGTSTP, checkSignal);
+        signal(SIGINT, handleSignal);
+        signal(SIGTSTP, handleSignal);
+        signal(SIGCHLD, handleSignal);
 
         // For background process status printing
         int status;
@@ -303,7 +305,7 @@ int main(int argc, char *argv[])
 
             else if(strcmp(next, "fg") == 0)
             {
-                fg(next, proc);
+                fg(next, proc, &proc_size);
             }
 
             // printf("%s\n", next);
