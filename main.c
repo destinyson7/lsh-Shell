@@ -8,6 +8,7 @@ void checkSignal(int signal)
 
 int main(int argc, char *argv[])
 {
+    clearScreen();
     printf(BLUE "Welcome to " CYAN "lsh" BLUE " aka laaaad's Shell\n\n");
     char curPath[MAX_SIZE];
     getcwd(curPath, MAX_SIZE);
@@ -293,6 +294,11 @@ int main(int argc, char *argv[])
             else if(strcmp(next, "overkill") == 0)
             {
                 overkill(proc);
+            }
+
+            else if(strcmp(next, "bg") == 0)
+            {
+                bg(next, proc);
             }
 
             // printf("%s\n", next);

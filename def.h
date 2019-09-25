@@ -28,6 +28,7 @@ typedef struct process
 #define MAGENTA "\x1b[35m"
 #define CYAN "\x1b[36m"
 #define RESET "\x1b[0m"
+#define clearScreen() printf("\033[H\033[J")
 
 void prompt();
 void cd(char *path, char *home);
@@ -44,3 +45,4 @@ void unsetEnv(char *token);
 void jobs(process proc[]);
 void kjob(char *token, process proc[]);
 void overkill(process proc[]);
+void bg(char *token, process proc[]);
