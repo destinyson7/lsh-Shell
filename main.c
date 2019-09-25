@@ -1,6 +1,6 @@
 #include "def.h"
 
-void handleSignal()
+void handleSignal(int signal)
 {
     // do nothing
 
