@@ -46,3 +46,4 @@ void jobs(process proc[]);
 void kjob(char *token, process proc[]);
 void overkill(process proc[]);
 void bg(char *token, process proc[]);
+void fg(char *token, process proc[]);

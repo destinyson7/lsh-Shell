@@ -301,6 +301,11 @@ int main(int argc, char *argv[])
                 bg(next, proc);
             }
 
+            else if(strcmp(next, "fg") == 0)
+            {
+                fg(next, proc);
+            }
+
             // printf("%s\n", next);
 
             else
