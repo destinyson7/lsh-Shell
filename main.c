@@ -238,6 +238,34 @@ int main(int argc, char *argv[])
 
             else
             {
+                int emptyPipe = 0;
+
+                for(int k = 0; duplicate[k] != '\0'; k++)
+                {
+                    if(emptyPipe == 1 && duplicate[k] == '|')
+                    {
+                        break;
+                    }
+
+                    // printf("%c\n", duplicate[k]);
+                    if(duplicate[k] == '|')
+                    {
+                        emptyPipe = 1;
+                    }
+
+                    else if(duplicate[k] != ' ' && duplicate[k] != '|')
+                    {
+                        // printf(" * %c\n", duplicate[k]);
+                        emptyPipe = 0;
+                    }
+                }
+
+                if(emptyPipe)
+                {
+                    printf("parse error near `|'\n");
+                    continue;
+                }
+
                 char storeCommands[MAX_SIZE][MAX_SIZE];
 
                 char tempStore[MAX_SIZE];
@@ -257,16 +285,31 @@ int main(int argc, char *argv[])
                 if(pipeSeparatedCommands == 1)
                 {
                     int flag = 0;
+                    // for(int k = 0; duplicate2[k] != '\0'; k++)
+                    // {
+                    //     if(duplicate2[k] == '|')
+                    //     {
+                    //         flag = 1;
+                    //     }
+                    // }
 
-                    for(int j = 0; command[i][j] != '\0'; j++)
+                    // if(flag == 1)
+                    // {
+                    //     printf("Error: empty pipe\n");
+                    //     continue;
+                    // }
+
+                    for(int k = 0; duplicate2[k] != '\0'; k++)
                     {
-                        if(command[i][j] == '&')
+                        if(duplicate2[k] == '&')
                         {
-                            flag = 1;
-                            command[i][j] = '\0';
+                            duplicate2[k] = '\0';
+                            flag = 1;                        
                             break;
                         }
                     }
+                    // char *cur = strtok(duplicate2, "|");
+
                     // printf("pipeSeparatedCommands = 1 ***\n");
                     char *cur = strtok(duplicate2, " \t\n");
 
@@ -366,7 +409,7 @@ int main(int argc, char *argv[])
                         {
                             if(storeCommands[j][k] == '&')
                             {
-                                printf("Parse error near `|`\n");
+                                printf("parse error near `|'\n");
                                 error = 1;
                             
                                 break;
