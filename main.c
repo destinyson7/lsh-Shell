@@ -191,20 +191,10 @@ int main(int argc, char *argv[])
         for(int i = 0; i < numberOfCommands; i++)
         {
             // Checking if '&' is present or not
-            int flag = 0;
-
-            for(int j = 0; command[i][j] != '\0'; j++)
-            {
-                if(command[i][j] == '&')
-                {
-                    flag = 1;
-                    command[i][j] = '\0';
-                    break;
-                }
-            }
+            
 
             // To ensure that null string does not get added in history command
-            if(strcmp(command[i], "\0") == 0)
+            if(strcmp(command[i], "\0") == 0 || strcmp(command[i], "&") == 0)
             {
                 continue;
             }
@@ -266,6 +256,17 @@ int main(int argc, char *argv[])
 
                 if(pipeSeparatedCommands == 1)
                 {
+                    int flag = 0;
+
+                    for(int j = 0; command[i][j] != '\0'; j++)
+                    {
+                        if(command[i][j] == '&')
+                        {
+                            flag = 1;
+                            command[i][j] = '\0';
+                            break;
+                        }
+                    }
                     // printf("pipeSeparatedCommands = 1 ***\n");
                     char *cur = strtok(duplicate2, " \t\n");
 
@@ -356,6 +357,45 @@ int main(int argc, char *argv[])
                 // printf("Pipe %d\n", pipeSeparatedCommands);
                 else
                 {
+                    int error = 0;
+                    for(int j = 0; j < pipeSeparatedCommands-1; j++)
+                    {
+                        // printf("%s\n", storeCommands[j]);
+
+                        for(int k = 0; storeCommands[j][k] != '\0'; k++)
+                        {
+                            if(storeCommands[j][k] == '&')
+                            {
+                                printf("Parse error near `|`\n");
+                                error = 1;
+                            
+                                break;
+                            }
+                        }
+
+                        if(error == 1)
+                        {
+                            break;
+                        }
+                    }
+
+                    if(error == 1)
+                    {
+                        continue;
+                    }
+
+                    int flag = 0;
+
+                    for(int j = 0; storeCommands[pipeSeparatedCommands-1][j] != '\0'; j++)
+                    {
+                        if(storeCommands[pipeSeparatedCommands-1][j] == '&')
+                        {
+                            flag = 1;
+                            storeCommands[pipeSeparatedCommands-1][j] = '\0';
+                            break;
+                        }
+                    }
+
                     for(int j = 0; j < pipeSeparatedCommands; j++)
                     {
                         char createCopy[MAX_SIZE];
@@ -364,7 +404,7 @@ int main(int argc, char *argv[])
 
                         // printf("** %s\n", createCopy);
 
-                        // printf("%s\n", next);
+                        // printf("%s\n", cur);
 
                         dup2(curin_fd, 0);
                         close(curin_fd);
