@@ -12,6 +12,7 @@
 #include <sys/wait.h>
 #include <signal.h>
 #include <ncurses.h>
+#include <fcntl.h>
 
 #define MAX_SIZE (int)1e3+5
 
@@ -36,7 +37,7 @@ void pwd();
 void exEcho(char *cur);
 void ls(char *token, char *home);
 void pinfo(char *token, char *home);
-void fg_bg(char *token, int flag, int *proc_size, process proc[]);
+void fg_bg(char *token, int flag, int **proc_size, process proc[]);
 int storeHistory(int done, char data[20][MAX_SIZE], char command[]);
 void history(char *token, char data[20][MAX_SIZE], int done);
 void nightswatch(char *token);
@@ -46,4 +47,6 @@ void jobs(process proc[]);
 void kjob(char *token, process proc[]);
 void overkill(process proc[]);
 void bg(char *token, process proc[]);
-void fg(char *token, process proc[], int *proc_size);
+void fg(char *token, process proc[], int **proc_size);
+int checkOutputRedirection(char curCommand[], int *outputFileLength, char outputFile[]);
+void execute(char *cur, char home[], process proc[], int *proc_size, char data[20][MAX_SIZE], int done, char duplicate[], int flag, int outputRedirection);

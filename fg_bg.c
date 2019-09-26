@@ -10,7 +10,7 @@ void handleZ1(int signal)
     return;
 }
 
-void fg_bg(char curCommand[], int flag, int *proc_size, process proc[])
+void fg_bg(char curCommand[], int flag, int **proc_size, process proc[])
 {
     // printf("%s curCommand\n", curCommand);
     char **store = (char**) malloc(sizeof(char*) * MAX_SIZE);
@@ -20,7 +20,7 @@ void fg_bg(char curCommand[], int flag, int *proc_size, process proc[])
 
     if(flag)
     {
-        strcpy(proc[*proc_size].name, curCommand);
+        strcpy(proc[**proc_size].name, curCommand);
     }
 
     char *token = strtok(curCommand, " \t\n");   
@@ -65,9 +65,9 @@ void fg_bg(char curCommand[], int flag, int *proc_size, process proc[])
         {
             setpgid(pid, pid);
             
-            proc[*proc_size].pid = pid;
-            strcpy(proc[*proc_size].name, saveName);
-            (*proc_size)++;
+            proc[**proc_size].pid = pid;
+            strcpy(proc[**proc_size].name, saveName);
+            (**proc_size)++;
         }
     }
 
@@ -106,9 +106,9 @@ void fg_bg(char curCommand[], int flag, int *proc_size, process proc[])
             // {
             //     kill(savePid, SIGSTOP);
                 
-            //     proc[*proc_size].pid = savePid;
-            //     strcpy(proc[*proc_size].name, saveName);
-            //     (*proc_size)++;
+            //     proc[**proc_size].pid = savePid;
+            //     strcpy(proc[**proc_size].name, saveName);
+            //     (**proc_size)++;
 
             //     zFlag1 = 0;
             // }    
@@ -129,9 +129,9 @@ void fg_bg(char curCommand[], int flag, int *proc_size, process proc[])
             {
                 kill(savePid, SIGSTOP);
                 
-                proc[*proc_size].pid = savePid;
-                strcpy(proc[*proc_size].name, saveName);
-                (*proc_size)++;
+                proc[**proc_size].pid = savePid;
+                strcpy(proc[**proc_size].name, saveName);
+                (**proc_size)++;
             }
         }
     }

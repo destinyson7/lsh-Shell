@@ -7,6 +7,9 @@ void handleSignal(int signal)
     return;
 }
 
+int outputFileLength = 0;
+char outputFile[MAX_SIZE];
+
 int main(int argc, char *argv[])
 {
     clearScreen();
@@ -238,6 +241,10 @@ int main(int argc, char *argv[])
 
             else
             {
+                outputFileLength = 0;
+                int outputRedirection = checkOutputRedirection(duplicate, &outputFileLength, outputFile);
+                // printf("%s %d %d\n", outputFile, outputFileLength, outputRedirection);
+                
                 int emptyPipe = 1;
 
                 for(int k = 0; duplicate[k] != '\0'; k++)
@@ -287,7 +294,7 @@ int main(int argc, char *argv[])
                     // printf("***\n");
                     int flag = 0;
 
-                    // if(duplicate[0] == '|')
+                    // if(duplicate[0] == '|    ')
                     // {
                     //     printf("syntax error near `|'\n");
                     //     continue;   
@@ -300,11 +307,11 @@ int main(int argc, char *argv[])
                     //     }
                     // }
 
-                    // if(flag == 1)
-                    // {
-                    //     printf("Error: empty pipe\n");
-                    //     continue;
-                    // }
+                    if(flag == 1)
+                    {
+                        printf("Error: empty pipe\n");
+                        continue;
+                    }
 
                     for(int k = 0; duplicate2[k] != '\0'; k++)
                     {
@@ -315,93 +322,79 @@ int main(int argc, char *argv[])
                             break;
                         }
                     }
+
+                    char *cur = NULL;
+
+                    if(outputRedirection == 1)
+                    {
+                        char *input = (char*)malloc(sizeof(char)*MAX_SIZE); 
+
+                        int spaceCount = 0;
+
+                        while(duplicate[spaceCount] == ' ')
+                        {
+                            spaceCount++;
+                        }
+
+                        for(int k = spaceCount; duplicate[k] != '\0'; k++)
+                        {
+                            if(duplicate[k] == '>')
+                            {
+                                input[k] = '\0';
+                                break;
+                            }
+
+                            input[k-spaceCount] = duplicate[k];
+                        }
+
+                        // strcpy(cur, input);
+                        cur = input;
+                        // printf("%s %s\n", cur, outputFile);
+                        int temp_fd = open(outputFile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+                        dup2(temp_fd, 1);
+                        close(temp_fd);
+                    }
+
+                    else if(outputRedirection == 2)
+                    {
+                        char *input = (char*)malloc(sizeof(char)*MAX_SIZE); 
+
+                        int spaceCount = 0;
+
+                        while(duplicate[spaceCount] == ' ')
+                        {
+                            spaceCount++;
+                        }
+
+                        for(int k = spaceCount; duplicate[k] != '\0'; k++)
+                        {
+                            if(duplicate[k] == '>')
+                            {
+                                input[k] = '\0';
+                                break;
+                            }
+
+                            input[k-spaceCount] = duplicate[k];
+                        }
+
+                        // strcpy(cur, input);
+                        cur = input;
+                        // printf("%s %s\n", cur, outputFile);
+                        int temp_fd = open(outputFile, O_WRONLY | O_APPEND | O_CREAT, 0644);
+                        dup2(temp_fd, 1);
+                        close(temp_fd);
+                    }
                     // char *cur = strtok(duplicate2, "|");
-
-                    // printf("pipeSeparatedCommands = 1 ***\n");
-                    char *cur = strtok(duplicate2, " \t\n");
-
-                    if(strcmp(cur, "quit") == 0)
-                    {
-                        return 0;
-                    }
-
-                    else if(strcmp(cur, "cd") == 0)
-                    {
-                        // printf("*****\n");
-                        cd(cur, home);
-                    }
-
-                    else if(strcmp(cur, "kjob") == 0)
-                    {
-                        kjob(cur, proc);
-                    }
-
-                    else if(strcmp(cur, "overkill") == 0)
-                    {
-                        overkill(proc);
-                    }
-
-                    else if(strcmp(cur, "bg") == 0)
-                    {
-                        bg(cur, proc);
-                    }
-
-                    else if(strcmp(cur, "fg") == 0)
-                    {
-                        fg(cur, proc, &proc_size);
-                    }
-
-                    else if(strcmp(cur, "pwd") == 0)
-                    {
-                        pwd();
-                    }
-
-                    else if(strcmp(cur, "echo") == 0)
-                    {
-                        exEcho(cur);
-                    }
-
-                    else if(strcmp(cur, "ls") == 0)
-                    {
-                        ls(cur, home);
-                    }
-
-                    else if(strcmp(cur, "pinfo") == 0)
-                    {
-                        pinfo(cur, home);
-                    }
-
-                    else if(strcmp(cur, "history") == 0)
-                    {
-                        history(cur, data, done);
-                    }
-
-                    else if(strcmp(cur, "nightswatch") == 0)
-                    {
-                        nightswatch(cur);
-                    }
-
-                    else if(strcmp(cur, "jobs") == 0)
-                    {
-                        // printf("*** %s\n", cur);
-                        jobs(proc);
-                    }
-
-                    else if(strcmp(cur, "setenv") == 0)
-                    {
-                        setEnv(cur);
-                    }
-
-                    else if(strcmp(cur, "unsetenv") == 0)
-                    {
-                        unsetEnv(cur);
-                    }
 
                     else
                     {
-                        // printf("%s * %s\n", cur, createCopy);
-                        fg_bg(duplicate, flag, &proc_size, proc);
+                        // printf("pipeSeparatedCommands = 1 ***\n");
+                        cur = strtok(duplicate2, " \t\n");
                     }
+
+                    execute(cur, home, proc, &proc_size, data, done, duplicate, flag, outputRedirection);
+                    dup2(stdin_fd, 0);
+                    dup2(stdout_fd, 1);
                 }
 
                 // printf("Pipe %d\n", pipeSeparatedCommands);
@@ -486,88 +479,7 @@ int main(int argc, char *argv[])
                         { 
                             // printf("*** %s\n", cur);
 
-                            if(strcmp(cur, "quit") == 0)
-                            {
-                                return 0;
-                            }
-
-                            else if(strcmp(cur, "cd") == 0)
-                            {
-                                // printf("*****\n");
-                                cd(cur, home);
-                            }
-
-                            else if(strcmp(cur, "kjob") == 0)
-                            {
-                                kjob(cur, proc);
-                            }
-
-                            else if(strcmp(cur, "overkill") == 0)
-                            {
-                                overkill(proc);
-                            }
-
-                            else if(strcmp(cur, "bg") == 0)
-                            {
-                                bg(cur, proc);
-                            }
-
-                            else if(strcmp(cur, "fg") == 0)
-                            {
-                                fg(cur, proc, &proc_size);
-                            }
-
-                            else if(strcmp(cur, "pwd") == 0)
-                            {
-                                pwd();
-                            }
-
-                            else if(strcmp(cur, "echo") == 0)
-                            {
-                                exEcho(cur);
-                            }
-
-                            else if(strcmp(cur, "ls") == 0)
-                            {
-                                ls(cur, home);
-                            }
-
-                            else if(strcmp(cur, "pinfo") == 0)
-                            {
-                                pinfo(cur, home);
-                            }
-
-                            else if(strcmp(cur, "history") == 0)
-                            {
-                                history(cur, data, done);
-                            }
-
-                            else if(strcmp(cur, "nightswatch") == 0)
-                            {
-                                nightswatch(cur);
-                            }
-
-                            else if(strcmp(cur, "jobs") == 0)
-                            {
-                                // printf("*** %s\n", cur);
-                                jobs(proc);
-                            }
-
-                            else if(strcmp(cur, "setenv") == 0)
-                            {
-                                setEnv(cur);
-                            }
-
-                            else if(strcmp(cur, "unsetenv") == 0)
-                            {
-                                unsetEnv(cur);
-                            }
-
-                            else
-                            {
-                                // printf("%s * %s\n", cur, createCopy);
-                                fg_bg(createCopy, flag, &proc_size, proc);
-                            }
+                            execute(cur, home, proc, &proc_size, data, done, createCopy, flag, 0);
                             
                             exit(0);
                         }

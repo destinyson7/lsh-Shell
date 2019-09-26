@@ -16,7 +16,7 @@ void handleZ(int signal)
     return;
 }
 
-void fg(char *token, process proc[], int *proc_size)
+void fg(char *token, process proc[], int **proc_size)
 {
     // printf("%s\n", token);
     token = strtok(NULL, " \t");
@@ -86,9 +86,9 @@ void fg(char *token, process proc[], int *proc_size)
                 //         printf("%%\n");
                 //         setpgid(savePid, savePid);
 
-                //         proc[*proc_size].pid = savePid;
-                //         strcpy(proc[*proc_size].name, proc[i].name);
-                //         (*proc_size)++;
+                //         proc[**proc_size].pid = savePid;
+                //         strcpy(proc[**proc_size].name, proc[i].name);
+                //         (**proc_size)++;
                 //         kill(savePid, SIGSTOP);
 
                 //         zFlag = 0;
@@ -106,9 +106,9 @@ void fg(char *token, process proc[], int *proc_size)
                 {
                     kill(savePid, SIGSTOP);
 
-                    proc[*proc_size].pid = savePid;
-                    strcpy(proc[*proc_size].name, proc[i].name);
-                    (*proc_size)++;
+                    proc[**proc_size].pid = savePid;
+                    strcpy(proc[**proc_size].name, proc[i].name);
+                    (**proc_size)++;
                 }
                 
                 return;
