@@ -238,7 +238,7 @@ int main(int argc, char *argv[])
 
             else
             {
-                int emptyPipe = 0;
+                int emptyPipe = 1;
 
                 for(int k = 0; duplicate[k] != '\0'; k++)
                 {
@@ -284,7 +284,14 @@ int main(int argc, char *argv[])
 
                 if(pipeSeparatedCommands == 1)
                 {
+                    // printf("***\n");
                     int flag = 0;
+
+                    // if(duplicate[0] == '|')
+                    // {
+                    //     printf("syntax error near `|'\n");
+                    //     continue;   
+                    // }
                     // for(int k = 0; duplicate2[k] != '\0'; k++)
                     // {
                     //     if(duplicate2[k] == '|')
