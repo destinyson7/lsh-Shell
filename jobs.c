@@ -8,6 +8,7 @@ void jobs(process proc[])
     {
         if(proc[i].pid != -1)
         {
+            // printf("* %d *\n", i);
             numberOfProcesses++;
             printf("[%d] ", numberOfProcesses);
 

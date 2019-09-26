@@ -8,7 +8,7 @@ void pinfo(char *token, char *home)
 
     if(token == NULL)
     {
-        int get = getpid();
+        int get = getppid();
 
         sprintf(pid, "%d", get);
     }

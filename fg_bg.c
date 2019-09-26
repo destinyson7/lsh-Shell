@@ -30,6 +30,7 @@ void fg_bg(char curCommand[], int flag, int *proc_size, process proc[])
     while(token != NULL)
     {
         store[cnt] = token;
+        // printf("%s *\n", store[cnt]);
         // printf("%s %d\n", token, cnt);
         // store[cnt][strlen(token)] = '\0';
         cnt++;
@@ -73,6 +74,8 @@ void fg_bg(char curCommand[], int flag, int *proc_size, process proc[])
     // Run in foreground
     else
     {
+        // printf("* %s\n", store[0]);
+
         int pid = fork();
 
         if(pid < 0)
@@ -82,6 +85,8 @@ void fg_bg(char curCommand[], int flag, int *proc_size, process proc[])
 
         else if(pid == 0)
         {
+            setpgid(0, 0);
+
             if(execvp(store[0], store) == -1)
             {
                 printf("%s: Command Not Found\n", store[0]);
@@ -92,20 +97,41 @@ void fg_bg(char curCommand[], int flag, int *proc_size, process proc[])
         else
         {
             savePid = pid;
-            signal(SIGTSTP, handleZ1);
+            // signal(SIGTSTP, handleZ1);
          
-            int status;
-            waitpid(pid, &status, WUNTRACED);
+            // int status;
+            // waitpid(pid, &status, WUNTRACED);
             
-            if(zFlag1 == 1)
+            // if(zFlag1 == 1)
+            // {
+            //     kill(savePid, SIGSTOP);
+                
+            //     proc[*proc_size].pid = savePid;
+            //     strcpy(proc[*proc_size].name, saveName);
+            //     (*proc_size)++;
+
+            //     zFlag1 = 0;
+            // }    
+            int shellPid = getpid();
+            int status;
+            signal(SIGTTOU, SIG_IGN);
+            signal(SIGTTIN, SIG_IGN);
+            tcsetpgrp(0, pid);
+            tcsetpgrp(1, pid);
+            waitpid(savePid, &status, WUNTRACED);
+            tcsetpgrp(0, getpgid(shellPid));
+            tcsetpgrp(1, getpgid(shellPid));
+            
+            signal(SIGTTOU, SIG_DFL);
+            signal(SIGTTIN, SIG_DFL);
+
+            if(WIFSTOPPED(status))
             {
                 kill(savePid, SIGSTOP);
                 
                 proc[*proc_size].pid = savePid;
                 strcpy(proc[*proc_size].name, saveName);
                 (*proc_size)++;
-
-                zFlag1 = 0;
             }
         }
     }

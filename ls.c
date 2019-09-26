@@ -26,10 +26,10 @@ void lsna(char *actualPath, int hidden)
 
         if(hidden == 1 || (hidden == 0 && curName[0] != '.'))
         {
-            printf("%s  ", curName);
+            printf("%s\n", curName);
         }
     }
-    printf("\n");
+    // printf("\n");
 
     closedir(dir);
 }
