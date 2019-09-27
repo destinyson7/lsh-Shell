@@ -49,4 +49,5 @@ void overkill(process proc[]);
 void bg(char *token, process proc[]);
 void fg(char *token, process proc[], int **proc_size);
 int checkOutputRedirection(char curCommand[], int *outputFileLength, char outputFile[]);
-void execute(char *cur, char home[], process proc[], int *proc_size, char data[20][MAX_SIZE], int done, char duplicate[], int flag, int outputRedirection);
+void execute(char *cur, char home[], process proc[], int *proc_size, char data[20][MAX_SIZE], int done, char duplicate[], int flag, int outputRedirection, int inputRedirection);
+int checkInputRedirection(char curCommand[], int *inputFileLength, char inputFile[]);

@@ -31,7 +31,7 @@ void fg_bg(char curCommand[], int flag, int **proc_size, process proc[])
     {
         store[cnt] = token;
         // printf("%s *\n", store[cnt]);
-        // printf("%s %d\n", token, cnt);
+        // printf("%s *** %d\n", token, cnt);
         // store[cnt][strlen(token)] = '\0';
         cnt++;
 
@@ -77,6 +77,7 @@ void fg_bg(char curCommand[], int flag, int **proc_size, process proc[])
     {
         // printf("* %s\n", store[0]);
 
+        // int pid = 7;
         int pid = fork();
 
         if(pid < 0)
@@ -90,8 +91,10 @@ void fg_bg(char curCommand[], int flag, int **proc_size, process proc[])
 
             // printf("hello ***\n");
 
+            // fflush(stdout);
             if(execvp(store[0], store) == -1)
             {
+                // printf("******\n");
                 printf("%s: Command Not Found\n", store[0]);
                 exit(0);
             }
@@ -114,14 +117,17 @@ void fg_bg(char curCommand[], int flag, int **proc_size, process proc[])
             //     (**proc_size)++;
 
             //     zFlag1 = 0;
-            // }    
+            // }   
+
             int shellPid = getpid();
             int status;
             signal(SIGTTOU, SIG_IGN);
             signal(SIGTTIN, SIG_IGN);
             tcsetpgrp(0, pid);
             tcsetpgrp(1, pid);
+            // printf("**\n"); 
             waitpid(savePid, &status, WUNTRACED);
+            // printf("**\n");
             tcsetpgrp(0, getpgid(shellPid));
             tcsetpgrp(1, getpgid(shellPid));
             
@@ -136,6 +142,7 @@ void fg_bg(char curCommand[], int flag, int **proc_size, process proc[])
                 strcpy(proc[**proc_size].name, saveName);
                 (**proc_size)++;
             }
+
         }
     }
 }

@@ -1,3 +1,9 @@
+cat 
+7
+1 ** 1
+cat  * cat 
+cat *** 0
+* cat
 #include "def.h"
 
 void handleSignal(int signal)
@@ -248,7 +254,7 @@ int main(int argc, char *argv[])
                 int outputRedirection = checkOutputRedirection(duplicate, &outputFileLength, outputFile);
                 int inputRedirection = checkInputRedirection(duplicate, &inputFileLength, inputFile);
                 // printf("%s %d %d\n", outputFile, outputFileLength, outputRedirection);
-                // printf("%s %d %d\n", inputFile, inputFileLength, inputRedirection);
+                printf("%s %d %d\n", inputFile, inputFileLength, inputRedirection);
                 
                 int emptyPipe = 1;
 
@@ -405,14 +411,14 @@ int main(int argc, char *argv[])
 
                         // strcpy(cur, input);
                         cur = input;
-                        // printf("%s\n", cur);
+                        printf("%s\n", cur);
                         // int temp_fd = 0;
                         int temp_fd = open(inputFile, O_RDONLY);
-                        // printf("%d\n", temp_fd);
+                        printf("%d\n", temp_fd);
                         if(temp_fd < 0)
                         {
                             can = 0;
-                            perror("Wrong input file name");
+                            perror("");
                             // printf("%s\n", );
                         }
 
@@ -430,7 +436,7 @@ int main(int argc, char *argv[])
 
                     if(can)
                     {
-                        // printf("%d ** %d\n", inputRedirection, outputRedirection);
+                        printf("%d ** %d\n", inputRedirection, outputRedirection);
                         execute(cur, home, proc, &proc_size, data, done, duplicate, flag, outputRedirection, inputRedirection);
                         // fflush(stdout);
                     }

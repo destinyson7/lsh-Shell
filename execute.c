@@ -1,6 +1,6 @@
 #include "def.h"
 
-void execute(char *cur, char home[], process proc[], int *proc_size, char data[20][MAX_SIZE], int done, char duplicate3[], int flag, int outputRedirection)
+void execute(char *cur, char home[], process proc[], int *proc_size, char data[20][MAX_SIZE], int done, char duplicate3[], int flag, int outputRedirection, int inputRedirection)
 {
     // printf("*****\n");
     if(strcmp(cur, "quit") == 0)
@@ -82,7 +82,7 @@ void execute(char *cur, char home[], process proc[], int *proc_size, char data[2
 
     else
     {
-        if(outputRedirection > 0)
+        if(outputRedirection > 0 || inputRedirection > 0)
         {
             strcpy(duplicate3, cur);
         }
