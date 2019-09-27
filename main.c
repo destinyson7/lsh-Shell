@@ -92,7 +92,7 @@ int main(int argc, char *argv[])
         prompt(home);
 
         // Disabling Ctrl + C and Ctrl + Z signals.
-        // signal(SIGINT, handleSignal);
+        signal(SIGINT, handleSignal);
         signal(SIGTSTP, handleSignal);
         signal(SIGCHLD, handleSignal);
 

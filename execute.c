@@ -80,6 +80,30 @@ void execute(char *cur, char home[], process proc[], int *proc_size, char data[2
         unsetEnv(cur);
     }
 
+    else if(strcmp(cur, "cronjob") == 0)
+    {
+        int cronPid = fork();
+
+        if(cronPid == -1)
+        {
+            perror("Unable to fork");
+        }
+
+        else if(cronPid == 0)
+        {
+            cronjob(cur, home, proc, *proc_size, data, done, duplicate3);
+
+            exit(0);
+        }
+
+        else
+        {
+            proc[*proc_size].pid = cronPid;
+            strcpy(proc[*proc_size].name, duplicate3);
+            (*proc_size)++; 
+        }
+    }
+
     else
     {
         if(outputRedirection > 0 || inputRedirection > 0)
@@ -88,5 +112,10 @@ void execute(char *cur, char home[], process proc[], int *proc_size, char data[2
         }
         // printf("%s * %s\n", cur, duplicate3);
         fg_bg(duplicate3, flag, &proc_size, proc);
+    }
+
+    if(flag == 11)
+    {
+        prompt(home);
     }
 }

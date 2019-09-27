@@ -52,3 +52,4 @@ int checkOutputRedirection(char curCommand[], int *outputFileLength, char output
 void execute(char *cur, char home[], process proc[], int *proc_size, char data[20][MAX_SIZE], int done, char duplicate[], int flag, int outputRedirection, int inputRedirection);
 int checkInputRedirection(char curCommand[], int *inputFileLength, char inputFile[]);
 int countUpArrows(char *s);
+void cronjob(char *token, char home[], process proc[], int proc_size, char data[20][MAX_SIZE], int done, char duplicate[]);
