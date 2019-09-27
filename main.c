@@ -493,6 +493,65 @@ int main(int argc, char *argv[])
                         dup2(curin_fd, 0);
                         close(curin_fd);
 
+                        int can = 1;
+                        int checkForInputRedirection = 0;
+
+                        for(int k = 0; createCopy[k] != '\0'; k++)
+                        {
+                            if(createCopy[k] == '<')
+                            {
+                                checkForInputRedirection = 1;
+                                break;
+                            }
+                        }
+                        if(checkForInputRedirection > 0)
+                        {
+                            char *input = (char*)malloc(sizeof(char)*MAX_SIZE); 
+
+                            int spaceCount = 0;
+
+                            while(createCopy[spaceCount] == ' ')
+                            {
+                                spaceCount++;
+                            }
+
+                            for(int k = spaceCount; createCopy[k] != '\0'; k++)
+                            {
+                                if(createCopy[k] == '>' || createCopy[k] == '<')
+                                {
+                                    input[k] = '\0';
+                                    break;
+                                }
+
+                                input[k-spaceCount] = createCopy[k];
+                            }
+
+                            // strcpy(cur, input);
+                            cur = input;
+                            // printf("%s\n", cur);
+                            // int temp_fd = 0;
+                            int temp_fd = open(inputFile, O_RDONLY);
+                            // printf("%d\n", temp_fd);
+                            if(temp_fd < 0)
+                            {
+                                can = 0;
+                                perror("Wrong input file name");
+                                // printf("%s\n", );
+                            }
+
+                            else
+                            {
+                                // printf("*******\n");
+
+                                dup2(temp_fd, 0);
+                                close(temp_fd);
+
+                                // printf("%d ****\n", dup2(temp_fd, 0));
+                                // printf("%d ***\n", close(temp_fd));
+                            }
+                        }
+
+
                         if(j < pipeSeparatedCommands - 1)
                         {
                             int pipe_fd[2];
@@ -568,14 +627,14 @@ int main(int argc, char *argv[])
                         { 
                             // printf("*** %s\n", cur);
 
-                            if(j == pipeSeparatedCommands-1)
+                            if(can && j == pipeSeparatedCommands-1)
                             {
-                                execute(cur, home, proc, &proc_size, data, done, createCopy, flag, outputRedirection, inputRedirection);
+                                execute(cur, home, proc, &proc_size, data, done, createCopy, flag, outputRedirection, checkForInputRedirection);
                             }
 
-                            else
+                            else if(can)
                             {
-                                execute(cur, home, proc, &proc_size, data, done, createCopy, flag, 0, 0);
+                                execute(cur, home, proc, &proc_size, data, done, createCopy, flag, 0, checkForInputRedirection);
                             }
                             
                             exit(0);
