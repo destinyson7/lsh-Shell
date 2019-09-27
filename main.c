@@ -325,7 +325,7 @@ int main(int argc, char *argv[])
 
                     char *cur = NULL;
 
-                    if(outputRedirection == 1)
+                    if(outputRedirection > 0)
                     {
                         char *input = (char*)malloc(sizeof(char)*MAX_SIZE); 
 
@@ -349,41 +349,22 @@ int main(int argc, char *argv[])
 
                         // strcpy(cur, input);
                         cur = input;
-                        // printf("%s %s\n", cur, outputFile);
-                        int temp_fd = open(outputFile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-                        dup2(temp_fd, 1);
-                        close(temp_fd);
-                    }
 
-                    else if(outputRedirection == 2)
-                    {
-                        char *input = (char*)malloc(sizeof(char)*MAX_SIZE); 
-
-                        int spaceCount = 0;
-
-                        while(duplicate[spaceCount] == ' ')
+                        if(outputRedirection == 1)
                         {
-                            spaceCount++;
+                            int temp_fd = open(outputFile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+                            dup2(temp_fd, 1);
+                            close(temp_fd);
                         }
 
-                        for(int k = spaceCount; duplicate[k] != '\0'; k++)
+                        else
                         {
-                            if(duplicate[k] == '>')
-                            {
-                                input[k] = '\0';
-                                break;
-                            }
-
-                            input[k-spaceCount] = duplicate[k];
+                            int temp_fd = open(outputFile, O_WRONLY | O_APPEND | O_CREAT, 0644);
+                            dup2(temp_fd, 1);
+                            close(temp_fd);   
                         }
-
-                        // strcpy(cur, input);
-                        cur = input;
-                        // printf("%s %s\n", cur, outputFile);
-                        int temp_fd = open(outputFile, O_WRONLY | O_APPEND | O_CREAT, 0644);
-                        dup2(temp_fd, 1);
-                        close(temp_fd);
                     }
+    
                     // char *cur = strtok(duplicate2, "|");
 
                     else
@@ -446,7 +427,6 @@ int main(int argc, char *argv[])
                         char *cur = strtok(storeCommands[j], " \t");
 
                         // printf("** %s\n", createCopy);
-
                         // printf("%s\n", cur);
 
                         dup2(curin_fd, 0);
@@ -458,16 +438,64 @@ int main(int argc, char *argv[])
                             pipe(pipe_fd);
                             curout_fd = pipe_fd[1];
                             curin_fd = pipe_fd[0];
-                        }
 
+                            // printf("%d %d ***\n", curout_fd, curin_fd);
+                        }
+                
                         else
                         {
-                            curout_fd = dup(stdout_fd);
+                            if(outputRedirection > 0)
+                            {
+                                char *input = (char*)malloc(sizeof(char)*MAX_SIZE); 
+
+                                int spaceCount = 0;
+
+                                while(createCopy[spaceCount] == ' ')
+                                {
+                                    spaceCount++;
+                                }
+
+                                for(int k = spaceCount; createCopy[k] != '\0'; k++)
+                                {
+                                    if(createCopy[k] == '>')
+                                    {
+                                        input[k] = '\0';
+                                        break;
+                                    }
+
+                                    input[k-spaceCount] = createCopy[k];
+                                }
+
+                                // strcpy(cur, input);
+                                cur = input;
+                                // printf("%s %s\n", input, outputFile);
+
+                                if(outputRedirection == 1)
+                                {
+                                    int temp_fd = open(outputFile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+                                    curout_fd = dup(temp_fd);
+                                    close(temp_fd);
+                                }
+
+                                else
+                                {
+                                    int temp_fd = open(outputFile, O_WRONLY | O_APPEND | O_CREAT, 0644);
+                                    curout_fd = dup(temp_fd);
+                                    close(temp_fd);   
+                                }
+                            }
+
+                            else
+                            {
+                                curout_fd = dup(stdout_fd);
+                            }
                         }
 
-                        dup2(curout_fd, 1);
+                        // printf("** %d\n", curout_fd);
+                        dup2(curout_fd, 1);                        
                         close(curout_fd);
-
+                        // printf("11\n");
+                        // fflush(stdout);
                         int pid_new = fork();
 
                         if(pid_new < 0)
@@ -479,7 +507,15 @@ int main(int argc, char *argv[])
                         { 
                             // printf("*** %s\n", cur);
 
-                            execute(cur, home, proc, &proc_size, data, done, createCopy, flag, 0);
+                            if(j == pipeSeparatedCommands-1)
+                            {
+                                execute(cur, home, proc, &proc_size, data, done, createCopy, flag, outputRedirection);
+                            }
+
+                            else
+                            {
+                                execute(cur, home, proc, &proc_size, data, done, createCopy, flag, 0);
+                            }
                             
                             exit(0);
                         }
@@ -491,8 +527,12 @@ int main(int argc, char *argv[])
                             dup2(stdin_fd, 0);
                             dup2(stdout_fd, 1);
                         }
+
+                        dup2(stdin_fd, 0);
+                        dup2(stdout_fd, 1);
                     }
 
+                
                 }             
                 
             }

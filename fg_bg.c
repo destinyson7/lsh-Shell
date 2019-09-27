@@ -52,6 +52,7 @@ void fg_bg(char curCommand[], int flag, int **proc_size, process proc[])
 
         if(pid == 0)
         {
+            // printf("*\n");
             setpgid(0, 0);
             // close(STDERR_FILENO); // So that processes like firefox does not print error after closing
             if(execvp(store[0], store) == -1)
@@ -86,6 +87,8 @@ void fg_bg(char curCommand[], int flag, int **proc_size, process proc[])
         else if(pid == 0)
         {
             setpgid(0, 0);
+
+            // printf("hello ***\n");
 
             if(execvp(store[0], store) == -1)
             {
