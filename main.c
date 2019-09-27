@@ -175,8 +175,40 @@ int main(int argc, char *argv[])
         getline(&s, &len, stdin);
 
         s[strlen(s)-1] = '\0';
+        
+        // printf("%s\n", s);
 
-        // printf("%s", s);
+        int upArrows = countUpArrows(s);
+
+        if(upArrows > 20)
+        {
+            upArrows = 20;
+        }
+
+        char findFromHistory[MAX_SIZE];
+
+        if(upArrows > 0)
+        {
+            // printf("%d * %d * %s\n", upArrows, done, data[20-upArrows]);
+            if(upArrows > done)
+            {
+                upArrows = done;
+            }
+
+            strcpy(findFromHistory, data[20-upArrows]);
+
+            // printf("%s ***\n", findFromHistory);
+
+            int newlen = strlen(findFromHistory);
+
+            for(int i = 0; i < newlen; i++)
+            {
+                s[i] = findFromHistory[i];
+            }
+            s[newlen] = '\0';
+        }
+
+        // printf("%s *******\n", s);
 
         char command[MAX_SIZE][MAX_SIZE];
 
