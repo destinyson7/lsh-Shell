@@ -592,10 +592,7 @@ int main(int argc, char *argv[])
                         dup2(stdin_fd, 0);
                         dup2(stdout_fd, 1);
                     }
-
-                
-                }             
-                
+                }            
             }
         }
     }
