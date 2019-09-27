@@ -1,0 +1,31 @@
+
+
+
+
+
+    
+    {
+    {
+    {
+    {
+    }
+    }
+    }
+    }
+{
+}
+    char changePath[3*MAX_SIZE];
+        char new[MAX_SIZE];
+    else
+    if(chdir(changePath) < 0)
+    if(path[0] == '~')
+    if(path == NULL)
+#include "def.h"
+        path = "~";
+    path = strtok(NULL, " \t");
+        printf("cd: %s: No such file or directory\n", path);
+        strcat(new, path+1);
+        strcpy(changePath, new);
+        strcpy(changePath, path);
+        strcpy(new, home);
+void cd(char *path, char *home)

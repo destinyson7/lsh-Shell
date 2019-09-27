@@ -107,15 +107,9 @@ void cronjob(char *token, char home[], process proc[], int proc_size, char data[
 
         // printf("** %s **\n", cur);
 
-        if(numberOfTimes == 0)
-        {
-            execute(cur, home, proc, &proc_size, data, done, duplicate, 11, 0, 0);
-        }
+        execute(cur, home, proc, &proc_size, data, done, command, 0, 0, 0);
 
-        else
-        {
-            execute(cur, home, proc, &proc_size, data, done, duplicate, 0, 0, 0);
-        }
+        prompt(home);
     }
 
 }

@@ -109,13 +109,8 @@ void execute(char *cur, char home[], process proc[], int *proc_size, char data[2
         if(outputRedirection > 0 || inputRedirection > 0)
         {
             strcpy(duplicate3, cur);
-        }
+        }   
         // printf("%s * %s\n", cur, duplicate3);
         fg_bg(duplicate3, flag, &proc_size, proc);
-    }
-
-    if(flag == 11)
-    {
-        prompt(home);
     }
 }

@@ -620,7 +620,7 @@ int main(int argc, char *argv[])
 
                                 // strcpy(cur, input);
                                 cur = input;
-                                // printf("%s %s\n", input, outputFile);
+                                // printf("%s * %s\n", input, outputFile);
 
                                 if(outputRedirection == 1)
                                 {
