@@ -1,10 +1,4 @@
-# Computer Systems Engineering-1 
-## Assignment 3
-
-**Tanish Lad**
-**2018114005**
-
-## lsh (laaaad's Shell)
+# lsh (laaaad's Shell)
 
 ### Pre-requisites
 You need to install **ncurses.h** library to make this work. You can install it by using
@@ -37,7 +31,7 @@ To delete all .o files, run `make clean`.
     * env.c         - setenv and unsetenv commands
     * jobs.c        - jobs command
     * redirection.c - helper file for executing input and output redirection
-    * upArrow       - up arrow functionality
+    * upArrow.c       - up arrow functionality
 
 ### Functioning
     * cd <directory path>                       - Changes directory to the given path. Changes to shell home if no directory is provided
