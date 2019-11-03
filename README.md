@@ -31,7 +31,7 @@ To delete all .o files, run `make clean`.
     * env.c         - setenv and unsetenv commands
     * jobs.c        - jobs command
     * redirection.c - helper file for executing input and output redirection
-    * upArrow.c       - up arrow functionality
+    * upArrow.c     - up arrow functionality
 
 ### Functioning
     * cd <directory path>                       - Changes directory to the given path. Changes to shell home if no directory is provided
