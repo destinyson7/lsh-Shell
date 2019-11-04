@@ -356,6 +356,7 @@ int main(int argc, char *argv[])
                         if(duplicate2[k] == '&')
                         {
                             duplicate2[k] = '\0';
+                            duplicate[k] = '\0';
                             flag = 1;                        
                             break;
                         }
