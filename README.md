@@ -1,4 +1,4 @@
-# lsh (laaaad's Shell)
+# lsh (manish's Shell)
 
 ### Pre-requisites
 You need to install **ncurses.h** library to make this work. You can install it by using
